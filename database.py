@@ -1,7 +1,8 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
-MONGO_URI = os.getenv("MANGO_URI")
-client = AsyncIOMotorClient(MONGO_URI)
+MONGO_URL = os.getenv("MANGO_URL")
+client = AsyncIOMotorClient(MONGO_URL)
 db = client["selfie_db"]
 collection = db["users"]
+
 
