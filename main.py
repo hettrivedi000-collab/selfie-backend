@@ -22,8 +22,8 @@ class UploadPayload(BaseModel):
     occupation: str
     city: str
 async def get_next_serial():
-    counter = await db.counters.find_one_update(
-        {"_id":"user_serial"},
+    counter = await db.collection.find_one_and_update(
+        {"_id":"COUNTER"},
         {"$inc":{"seq":1}},
         upsert=true,
         return_document=true
@@ -66,4 +66,5 @@ async def get_all_users():
         })
 
     return users
+
 
