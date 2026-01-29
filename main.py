@@ -53,7 +53,7 @@ async def upload_user(payload: UploadPayload):
 @app.get("/all-users")
 async def get_all_users():
     users = []
-    cursor = collection.find({"_id":{"$ne":"COUNTER"}).sort("serial_no",-1)
+    cursor = collection.find({"_id":{"$ne":"COUNTER"}}).sort("serial_no",-1)
 
     async for u in cursor:
         users.append({
@@ -66,6 +66,7 @@ async def get_all_users():
         })
 
     return users
+
 
 
 
