@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from datetime import datetime
-
+from database import db
 from database import collection
 
 app = FastAPI()
@@ -21,12 +21,18 @@ class UploadPayload(BaseModel):
     mobile: str
     occupation: str
     city: str
-
+async def get_next_serial():
+    counter = await db.counters.find_one_update(
+        {"_id":"user_serial"},
+        {"$inc":{"seq":1}},
+        upsert=true,
+        return_document=true
+    )
+    return counter["seq"]
 
 @app.post("/upload")
 async def upload_user(payload: UploadPayload):
-    last = await collection.find_one(sort=[("serial_no", -1)])
-    next_serial = 1 if last is None else last["serial_no"] + 1
+    next_serial=await get_next_serial()     
 
     doc = {
         "serial_no": next_serial,
@@ -60,3 +66,4 @@ async def get_all_users():
         })
 
     return users
+
