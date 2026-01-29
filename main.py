@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from datetime import datetime
 from database import db
 from database import collection
+from pymongo import ReturnDocument
 
 app = FastAPI()
 
@@ -22,11 +23,11 @@ class UploadPayload(BaseModel):
     occupation: str
     city: str
 async def get_next_serial():
-    counter = await db.collection.find_one_and_update(
+    counter = await collection.find_one_and_update(
         {"_id":"COUNTER"},
         {"$inc":{"seq":1}},
-        upsert=true,
-        return_document=true
+        upsert=True,
+        return_document=ReturnDocument.AFTER
     )
     return counter["seq"]
 
@@ -66,6 +67,7 @@ async def get_all_users():
         })
 
     return users
+
 
 
 
